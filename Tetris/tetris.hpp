@@ -16,7 +16,7 @@ class Tetris
 	struct Coords
 	{
 		std::uint32_t x, y;
-	}z[squares], k[squares];
+	}z[squares]{}, k[squares]{};
 
 	std::shared_ptr<sf::RenderWindow> window;
 	sf::Texture tiles;
