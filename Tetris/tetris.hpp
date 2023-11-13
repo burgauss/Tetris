@@ -10,7 +10,7 @@ class Tetris
 	std::shared_ptr<sf::Sprite> sprite;
 
 protected:
-	void event();
+	void events();
 	void draw();
 
 public:
