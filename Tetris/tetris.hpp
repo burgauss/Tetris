@@ -22,10 +22,16 @@ class Tetris
 	sf::Texture tiles;
 	std::shared_ptr<sf::Sprite> sprite;
 
+	int dirx;
+	bool rotate;
+
 protected:
 	void events();
 	void draw();
 	void moveToDown();
+	void setRotate();
+	void resetValues();
+	void changePosition();
 
 public:
 	Tetris();

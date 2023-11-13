@@ -33,6 +33,15 @@ Tetris::Tetris()
 	sprite->setTexture(tiles);
 	sprite->setTextureRect(sf::IntRect(0, 0, 36,36));
 
+	dirx = { 0 };
+	rotate = { false };
+
+	//std::uint32_t number = std::rand() % shapes;
+	//for (std::size_t i{}; i < squares; i++)
+	//{
+	//	z[i].x = forms[number][i] % 2;
+	//	z[i].y = forms[number][i] / 2;
+	//}
 }
 
 void Tetris::events()
@@ -42,6 +51,22 @@ void Tetris::events()
 		if (e->type == sf::Event::Closed)
 		{
 			window->close();
+		}
+
+		if (e->type == sf::Event::KeyPressed)
+		{
+			if (e->key.code == sf::Keyboard::Up)
+			{
+				rotate = true;
+			}
+			else if (e->key.code == sf::Keyboard::Right)
+			{
+				++dirx;
+			}
+			else if (e->key.code == sf::Keyboard::Left)
+			{
+				--dirx;
+			}
 		}
 	}
 }
@@ -63,7 +88,10 @@ void Tetris::run()
 	while (window->isOpen())
 	{
 		events();
+		changePosition();
+		setRotate();
 		moveToDown();
+		resetValues();
 		draw();
 	}
 }
@@ -71,13 +99,44 @@ void Tetris::run()
 void Tetris::moveToDown()
 {
 	std::uint32_t number = { 3 };
-	//if (z[0].x == 0)
-	//{
+	if (z[0].x == 0)
+	{
+		for (std::size_t i{}; i < squares; ++i)
+		{
+			z[i].x = forms[number][i] % 2;
+			z[i].y = forms[number][i] / 2;
+		}
+	}
+
+}
+
+void Tetris::setRotate()
+{
+	if (rotate)
+	{
+		Coords coords = z[1];
+		for (std::size_t i{}; i < squares; ++i)
+		{
+			int x = z[i].y - coords.y;
+			int y = z[i].x - coords.x;
+
+			z[i].x = coords.x - x;
+			z[i].y = coords.y + y;
+		}
+	}
+}
+
+void Tetris::resetValues()
+{
+	dirx = 0;
+	rotate = false;
+}
+
+void Tetris::changePosition()
+{
 	for (std::size_t i{}; i < squares; ++i)
 	{
-		z[i].x = forms[number][i] % 2;
-		z[i].y = forms[number][i] / 2;
+		z[i].x += dirx;
 	}
-	//}
 
 }
