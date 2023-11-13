@@ -36,14 +36,15 @@ Tetris::Tetris()
 	dirx = { 0 };
 	rotate = { false };
 	timercount = { 0.f };
-	delay = { 0.3f };
+	delay = { 0.3f };		  
+	color = { 1 };
 
-	//std::uint32_t number = std::rand() % shapes;
-	//for (std::size_t i{}; i < squares; i++)
-	//{
-	//	z[i].x = forms[number][i] % 2;
-	//	z[i].y = forms[number][i] / 2;
-	//}
+	std::uint32_t number = std::rand() % shapes;
+	for (std::size_t i{}; i < squares; i++)
+	{
+		z[i].x = forms[number][i] % 2;
+		z[i].y = forms[number][i] / 2;
+	}
 }
 
 void Tetris::events()
@@ -82,6 +83,18 @@ void Tetris::events()
 void Tetris::draw() {
 	window->clear(sf::Color::Black);
 
+	for (std::size_t i{}; i < lines; ++i)
+	{
+		for (std::size_t j{}; j < cols; ++j)
+		{
+			if (area[i][j] != 0)
+			{
+				sprite->setPosition(j * 36, i * 36);
+				window->draw(*sprite);
+			}
+		}
+	}
+
 	for (std::size_t i{}; i < squares; ++i)
 	{
 		sprite->setPosition(z[i].x * 36, z[i].y * 36);
@@ -110,19 +123,30 @@ void Tetris::moveToDown()
 	{
 		for (std::size_t i{}; i < squares; ++i)
 		{
+			k[i] = z[i];
 			++z[i].y;
 		}
 		timercount = 0;
-	}
 
-	std::uint32_t number = { 3 };
-	if (z[0].x == 0)
-	{
-		for (std::size_t i{}; i < squares; ++i)
+		if (maxLimit())
 		{
-			z[i].x = forms[number][i] % 2;
-			z[i].y = forms[number][i] / 2;
+			for (std::size_t i{}; i < squares; ++i)
+			{
+				area[k[i].y][k[i].x] = color;
+			}
+
+			std::uint32_t number = std::rand()%shapes;
+			color = std::rand()%shapes + 1;
+			if (z[0].x == 0)
+			{
+				for (std::size_t i{}; i < squares; ++i)
+				{
+					z[i].x = forms[number][i] % 2;
+					z[i].y = forms[number][i] / 2;
+				}
+			}
 		}
+
 	}
 
 }
@@ -141,6 +165,14 @@ void Tetris::setRotate()
 			z[i].y = coords.y + y;
 		}
 	}
+
+	if (maxLimit())
+	{
+		for (std::size_t i{}; i < squares; ++i)
+		{
+			z[i] = k[i];
+		}
+	}
 }
 
 void Tetris::resetValues()
@@ -153,7 +185,30 @@ void Tetris::changePosition()
 {
 	for (std::size_t i{}; i < squares; ++i)
 	{
+		k[i] = z[i];
 		z[i].x += dirx;
 	}
+	if (maxLimit())
+	{
+		for (std::size_t i{}; i < squares; ++i)
+		{
+			z[i] = k[i];
+		}
+	}
 
+}
+
+bool Tetris::maxLimit()
+{
+	for (std::size_t i{}; i < squares; i++)
+	{
+		if (z[i].x < 0 ||
+			z[i].x >= cols ||
+			z[i].y >= lines	 ||
+			area[z[i].y][z[i].x])
+		{
+			return true;
+		}
+		return false;
+	}
 }
