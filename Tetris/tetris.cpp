@@ -78,6 +78,11 @@ void Tetris::events()
 			}
 		}
 	}
+
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		delay = 0.05f;
+	}
 }
 
 void Tetris::draw() {
@@ -126,7 +131,6 @@ void Tetris::moveToDown()
 			k[i] = z[i];
 			++z[i].y;
 		}
-		timercount = 0;
 
 		if (maxLimit())
 		{
@@ -136,19 +140,16 @@ void Tetris::moveToDown()
 			}
 
 			std::uint32_t number = std::rand()%shapes;
-			color = std::rand()%shapes + 1;
-			if (z[0].x == 0)
+			color = std::rand() % shapes + 1;
+
+			for (std::size_t i{}; i < squares; ++i)
 			{
-				for (std::size_t i{}; i < squares; ++i)
-				{
-					z[i].x = forms[number][i] % 2;
-					z[i].y = forms[number][i] / 2;
-				}
+				z[i].x = forms[number][i] % 2;
+				z[i].y = forms[number][i] / 2;
 			}
 		}
-
+		timercount = 0;
 	}
-
 }
 
 void Tetris::setRotate()
@@ -164,21 +165,24 @@ void Tetris::setRotate()
 			z[i].x = coords.x - x;
 			z[i].y = coords.y + y;
 		}
-	}
 
-	if (maxLimit())
-	{
-		for (std::size_t i{}; i < squares; ++i)
+		if (maxLimit())
 		{
-			z[i] = k[i];
+			for (std::size_t i{}; i < squares; ++i)
+			{
+				z[i] = k[i];
+			}
 		}
 	}
+
+
 }
 
 void Tetris::resetValues()
 {
 	dirx = 0;
 	rotate = false;
+	delay = 0.3f;
 }
 
 void Tetris::changePosition()
@@ -200,15 +204,16 @@ void Tetris::changePosition()
 
 bool Tetris::maxLimit()
 {
-	for (std::size_t i{}; i < squares; i++)
+	for (std::size_t i{}; i < squares; ++i)
 	{
 		if (z[i].x < 0 ||
 			z[i].x >= cols ||
 			z[i].y >= lines	 ||
-			area[z[i].y][z[i].x])
+			area[ z[i].y ][ z[i].x ])
 		{
 			return true;
 		}
-		return false;
 	}
+	return false;
+
 }
