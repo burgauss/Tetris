@@ -35,6 +35,8 @@ Tetris::Tetris()
 
 	dirx = { 0 };
 	rotate = { false };
+	timercount = { 0.f };
+	delay = { 0.3f };
 
 	//std::uint32_t number = std::rand() % shapes;
 	//for (std::size_t i{}; i < squares; i++)
@@ -46,6 +48,12 @@ Tetris::Tetris()
 
 void Tetris::events()
 {
+	float time = clock.getElapsedTime().asSeconds();
+	clock.restart();
+	timercount += time;
+
+
+
 	auto e = std::make_shared<sf::Event>();
 	while (window->pollEvent(*e)) {
 		if (e->type == sf::Event::Closed)
@@ -98,6 +106,15 @@ void Tetris::run()
 
 void Tetris::moveToDown()
 {
+	if (timercount > delay)
+	{
+		for (std::size_t i{}; i < squares; ++i)
+		{
+			++z[i].y;
+		}
+		timercount = 0;
+	}
+
 	std::uint32_t number = { 3 };
 	if (z[0].x == 0)
 	{

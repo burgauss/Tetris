@@ -21,6 +21,8 @@ class Tetris
 	std::shared_ptr<sf::RenderWindow> window;
 	sf::Texture tiles;
 	std::shared_ptr<sf::Sprite> sprite;
+	sf::Clock clock;
+	float timercount, delay;
 
 	int dirx;
 	bool rotate;
