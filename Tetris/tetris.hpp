@@ -24,7 +24,7 @@ class Tetris
 	sf::Clock clock;
 	float timercount, delay;
 
-	int dirx;
+	int dirx, color;
 	bool rotate;
 
 protected:
@@ -34,6 +34,8 @@ protected:
 	void setRotate();
 	void resetValues();
 	void changePosition();
+	bool maxLimit();
+
 
 public:
 	Tetris();
