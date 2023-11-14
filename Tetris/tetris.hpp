@@ -22,9 +22,11 @@ class Tetris
 	sf::Texture tiles;
 	std::shared_ptr<sf::Sprite> sprite;
 	sf::Clock clock;
+	sf::Font font;
+	sf::Text txtScore;
 	float timercount, delay;
 
-	int dirx, color;
+	int dirx, color, score;
 	bool rotate;
 
 protected:
@@ -35,6 +37,7 @@ protected:
 	void resetValues();
 	void changePosition();
 	bool maxLimit();
+	void setScore();
 
 
 public:

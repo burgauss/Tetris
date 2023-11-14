@@ -33,7 +33,7 @@ Tetris::Tetris()
 	sprite->setTexture(tiles);
 	sprite->setTextureRect(sf::IntRect(0, 0, 36,36));
 
-	dirx = { 0 };
+	dirx = score = { 0 };
 	rotate = { false };
 	timercount = { 0.f };
 	delay = { 0.3f };		  
@@ -45,6 +45,14 @@ Tetris::Tetris()
 		z[i].x = forms[number][i] % 2;
 		z[i].y = forms[number][i] / 2;
 	}
+
+	font.loadFromFile("C:/Users/juanb/source/repos/Tetris/Resources/font.ttf");
+	txtScore.setFont(font);
+	txtScore.setPosition(100.f, 10.f);
+	txtScore.setString("SCORE: " + std::to_string(score));
+	txtScore.setCharacterSize(30);
+	txtScore.setOutlineThickness(3);
+	
 }
 
 void Tetris::events()
@@ -94,6 +102,7 @@ void Tetris::draw() {
 		{
 			if (area[i][j] != 0)
 			{
+				sprite->setTextureRect(sf::IntRect(area[i][j] * 36, 0, 36, 36));
 				sprite->setPosition(j * 36, i * 36);
 				window->draw(*sprite);
 			}
@@ -102,10 +111,12 @@ void Tetris::draw() {
 
 	for (std::size_t i{}; i < squares; ++i)
 	{
+		sprite->setTextureRect(sf::IntRect(color * 36, 0, 36, 36));
 		sprite->setPosition(z[i].x * 36, z[i].y * 36);
 		window->draw(*sprite);
 	}
 
+	window->draw(txtScore);
 	window->display();
 }
 
@@ -117,6 +128,7 @@ void Tetris::run()
 		changePosition();
 		setRotate();
 		moveToDown();
+		setScore();
 		resetValues();
 		draw();
 	}
@@ -216,4 +228,29 @@ bool Tetris::maxLimit()
 	}
 	return false;
 
+}
+
+void Tetris::setScore()
+{
+	std::uint32_t match = lines - 1;
+	for (std::size_t i = match; i >= 1; --i)
+	{
+		std::uint32_t sum{};
+		for (std::size_t j{}; j < cols; ++j)
+		{
+			if (area[i][j])
+			{
+				++sum;
+			}
+			area[match][j] = area[i][j];
+		}
+		if (sum < cols)
+		{
+			--match;
+		}
+		else
+		{
+			txtScore.setString("SCORE: " + std::to_string(++score));
+		}
+	}
 }
