@@ -33,8 +33,11 @@ Tetris::Tetris()
 	sprite->setTexture(tiles);
 	sprite->setTextureRect(sf::IntRect(0, 0, 36,36));
 
+	bg.loadFromFile("C:/Users/juanb/source/repos/Tetris/Resources/background.png");
+	background = std::make_shared<sf::Sprite>();
+	background->setTexture(bg);
 	dirx = score = { 0 };
-	rotate = { false };
+	rotate = gameover = { false };
 	timercount = { 0.f };
 	delay = { 0.3f };		  
 	color = { 1 };
@@ -51,7 +54,13 @@ Tetris::Tetris()
 	txtScore.setPosition(100.f, 10.f);
 	txtScore.setString("SCORE: " + std::to_string(score));
 	txtScore.setCharacterSize(30);
-	txtScore.setOutlineThickness(3);
+	txtScore.setOutlineThickness(3);   
+
+	txtGameOver.setFont(font);
+	txtGameOver.setPosition(30.f, 300.f);
+	txtGameOver.setString("GAME OVER");
+	txtGameOver.setCharacterSize(30);
+	txtGameOver.setOutlineThickness(3);
 	
 }
 
@@ -116,7 +125,12 @@ void Tetris::draw() {
 		window->draw(*sprite);
 	}
 
+	window->draw(*background);
 	window->draw(txtScore);
+	if (gameover)
+	{
+		window->draw(txtGameOver);
+	}
 	window->display();
 }
 
@@ -125,11 +139,14 @@ void Tetris::run()
 	while (window->isOpen())
 	{
 		events();
-		changePosition();
-		setRotate();
-		moveToDown();
-		setScore();
-		resetValues();
+		if (!gameover)
+		{
+			changePosition();
+			setRotate();
+			moveToDown();
+			setScore();
+			resetValues();
+		}
 		draw();
 	}
 }
@@ -240,6 +257,10 @@ void Tetris::setScore()
 		{
 			if (area[i][j])
 			{
+				if (i == 1)
+				{
+					gameover = true;
+				}
 				++sum;
 			}
 			area[match][j] = area[i][j];

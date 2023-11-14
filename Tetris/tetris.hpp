@@ -19,15 +19,16 @@ class Tetris
 	}z[squares]{}, k[squares]{};
 
 	std::shared_ptr<sf::RenderWindow> window;
-	sf::Texture tiles;
+	sf::Texture tiles, bg;
 	std::shared_ptr<sf::Sprite> sprite;
+	std::shared_ptr<sf::Sprite> background;
 	sf::Clock clock;
 	sf::Font font;
-	sf::Text txtScore;
+	sf::Text txtScore, txtGameOver;
 	float timercount, delay;
 
 	int dirx, color, score;
-	bool rotate;
+	bool rotate, gameover;
 
 protected:
 	void events();
