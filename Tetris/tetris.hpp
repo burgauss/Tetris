@@ -27,7 +27,7 @@ class Tetris
 	sf::Text txtScore, txtGameOver;
 	float timercount, delay;
 
-	int dirx, color, score;
+	int dirx, color, score, initPosition;
 	bool rotate, gameover;
 
 protected:
