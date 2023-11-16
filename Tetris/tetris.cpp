@@ -64,7 +64,7 @@ Tetris::Tetris()
 	txtScore.setOutlineThickness(3);   
 
 	txtGameOver.setFont(font);
-	txtGameOver.setPosition(30.f, 300.f);
+	txtGameOver.setPosition(100.f, 300.f);
 	txtGameOver.setString("GAME OVER");
 	txtGameOver.setCharacterSize(30);
 	txtGameOver.setOutlineThickness(3);
@@ -195,7 +195,7 @@ void Tetris::moveToDown()
 
 			std::uint32_t number = std::rand()%shapes;
 			color = std::rand() % shapes + 1;
-			initPosition = std::rand() % cols - 2;
+			initPosition = std::rand() % (cols - 2);
 
 
 			for (std::size_t i{}; i < squares; ++i)
